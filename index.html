@@ -6,17 +6,17 @@
 
   <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="lib/materialize/css/materialize.min.css">
+  <link rel="stylesheet" href="css/speedcoding.css">
   <script src="//skyway.io/dist/0.3/peer.min.js"></script>
   <script src="lib/multiparty.min.js"></script>
   <script src="lib/js.cookie.js"></script>
   <script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
-  <script src="lib/materialize/js/materialize.min.js"></script>
   <script src="lib/ace/ace.js"></script>
   <script src="js/speedcoding-player.js"></script>
   <script src="js/speedcoding-chat.js"></script>
   <script src="js/speedcoding-editor.js"></script>
   <script src="js/speedcoding.js"></script>
-  <link rel="stylesheet" href="css/speedcoding.css">
+  <script src="lib/materialize/js/materialize.min.js"></script>
 </head>
 <body>
   <div class="container">
@@ -33,42 +33,105 @@
         <a href="?room=room3">Player</a>/<a href="?room=room3&observer">Observer</a>
       </div>
     </header>
+
     <div id="main" class="row">
       <div id="programThemeWrapper" class="col m12">
-        <div id="programTheme">
-          <p>数値2つを引数にとってその間の数の総和を返す関数funcを作れ</p>
-          <ul>
-            <li>※整数のみ渡される前提でよい（バリデーション不要）</li>
-            <li>※引数の順番はどちらでも対応できること</li>
-            <li>※負の値にも対応すること</li>
-          </ul>
-        </div>
-        <pre class="example">
+        <div class="card">
+          <div id="programTheme" class="card-content teal white-text">
+            <p class="card-title">x～yまでの総和を返す関数funcを作りましょう</p>
+            <div class="themeDetail">
+              <p>引数に整数2つをとり、その間の整数をすべて足した結果を返す関数をfuncという名前で作成してください。</p>
+              <p>例えば1と10が渡された場合は55を返してください。</p>
+            </div>
+            <ul>
+              <li>※整数のみ渡される前提でよい(バリデーション不要)</li>
+              <li>※引数の順番はどちらでも対応できること</li>
+              <li>※負の値にも対応すること</li>
+            </ul>
+            <div class="card-panel teal lighten-5 black-text">
+              <pre class="example">
+// 以下のように関数定義を記述してください
+function func(arg1, arg2) {
+  // 計算する
+  return resultValue;
+}</pre>
+            </div>
+            <p>結果の判定は以下のような関数呼び出しを実行して判定します</p>
+            <div class="card-panel teal lighten-5 black-text">
+              <pre class="example">
 func(1,10); => 50;
-func(10,1); => 50; // 引数の順番を逆にしても動くこと
-func(-1,2); => 2; // 負の値も対応すること
-        </pre>
+func(10,1); => 50; // 引数の順番を逆にしても挙動が変わらないこと
+func(-1,2); => 2; // 負の値も対応すること</pre>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div id="editorsWrapper" class="col s9 editorsWrapper">
-        <div id="editorSetting" class="players_ui">
-          <select id="editorTheme" size="1">
-          <optgroup label="Bright"><option value="ace/theme/chrome">Chrome</option><option value="ace/theme/clouds">Clouds</option><option value="ace/theme/crimson_editor">Crimson Editor</option><option value="ace/theme/dawn">Dawn</option><option value="ace/theme/dreamweaver">Dreamweaver</option><option value="ace/theme/eclipse">Eclipse</option><option value="ace/theme/github">GitHub</option><option value="ace/theme/iplastic">IPlastic</option><option value="ace/theme/solarized_light">Solarized Light</option><option value="ace/theme/textmate">TextMate</option><option value="ace/theme/tomorrow">Tomorrow</option><option value="ace/theme/xcode">XCode</option><option value="ace/theme/kuroir">Kuroir</option><option value="ace/theme/katzenmilch">KatzenMilch</option><option value="ace/theme/sqlserver">SQL Server</option></optgroup><optgroup label="Dark"><option value="ace/theme/ambiance">Ambiance</option><option value="ace/theme/chaos">Chaos</option><option value="ace/theme/clouds_midnight">Clouds Midnight</option><option value="ace/theme/cobalt">Cobalt</option><option value="ace/theme/idle_fingers">idle Fingers</option><option value="ace/theme/kr_theme">krTheme</option><option value="ace/theme/merbivore">Merbivore</option><option value="ace/theme/merbivore_soft">Merbivore Soft</option><option value="ace/theme/mono_industrial">Mono Industrial</option><option value="ace/theme/monokai">Monokai</option><option value="ace/theme/pastel_on_dark">Pastel on dark</option><option value="ace/theme/solarized_dark">Solarized Dark</option><option value="ace/theme/terminal">Terminal</option><option value="ace/theme/tomorrow_night">Tomorrow Night</option><option value="ace/theme/tomorrow_night_blue">Tomorrow Night Blue</option><option value="ace/theme/tomorrow_night_bright">Tomorrow Night Bright</option><option value="ace/theme/tomorrow_night_eighties">Tomorrow Night 80s</option><option value="ace/theme/twilight">Twilight</option><option value="ace/theme/vibrant_ink">Vibrant Ink</option></optgroup></select>
+        <div id="editorSetting" class="row">
+          <div class="col s6">
+            <label for="editorTheme">Editor Theme</label>
+            <select name="" id="editorTheme" class="browser-default">
+              <optgroup label="Bright">
+                <option value="ace/theme/chrome">Chrome</option>
+                <option value="ace/theme/clouds">Clouds</option>
+                <option value="ace/theme/crimson_editor">Crimson Editor</option>
+                <option value="ace/theme/dawn">Dawn</option>
+                <option value="ace/theme/dreamweaver">Dreamweaver</option>
+                <option value="ace/theme/eclipse">Eclipse</option>
+                <option value="ace/theme/github">GitHub</option>
+                <option value="ace/theme/iplastic">IPlastic</option>
+                <option value="ace/theme/solarized_light">Solarized Light</option>
+                <option value="ace/theme/textmate">TextMate</option>
+                <option value="ace/theme/tomorrow">Tomorrow</option>
+                <option value="ace/theme/xcode">XCode</option>
+                <option value="ace/theme/kuroir">Kuroir</option>
+                <option value="ace/theme/katzenmilch">KatzenMilch</option>
+                <option value="ace/theme/sqlserver">SQL Server</option>
+              </optgroup>
+              <optgroup label="Dark">
+                <option value="ace/theme/ambiance">Ambiance</option>
+                <option value="ace/theme/chaos">Chaos</option>
+                <option value="ace/theme/clouds_midnight">Clouds Midnight</option>
+                <option value="ace/theme/cobalt">Cobalt</option>
+                <option value="ace/theme/idle_fingers">idle Fingers</option>
+                <option value="ace/theme/kr_theme">krTheme</option>
+                <option value="ace/theme/merbivore">Merbivore</option>
+                <option value="ace/theme/merbivore_soft">Merbivore Soft</option>
+                <option value="ace/theme/mono_industrial">Mono Industrial</option>
+                <option value="ace/theme/monokai">Monokai</option>
+                <option value="ace/theme/pastel_on_dark">Pastel on dark</option>
+                <option value="ace/theme/solarized_dark">Solarized Dark</option>
+                <option value="ace/theme/terminal">Terminal</option>
+                <option value="ace/theme/tomorrow_night">Tomorrow Night</option>
+                <option value="ace/theme/tomorrow_night_blue">Tomorrow Night Blue</option>
+                <option value="ace/theme/tomorrow_night_bright">Tomorrow Night Bright</option>
+                <option value="ace/theme/tomorrow_night_eighties">Tomorrow Night 80s</option>
+                <option value="ace/theme/twilight">Twilight</option>
+                <option value="ace/theme/vibrant_ink">Vibrant Ink</option>
+              </optgroup>
+            </select>
+          </div>
 
-          <select name="" id="editorMode" class="players_ui">
-            <option value="ace/mode/javascript">JavaScript</option>
-            <option value="ace/mode/php" class="disabled">PHP</option>
-            <option value="ace/mode/ruby" class="disabled">Ruby</option>
-            <option value="ace/mode/python" class="disabled">Python</option>
-          </select>
+          <div class="col s6 players_ui">
+            <label for="editorMode">Editor Mode</label>
+            <select name="" id="editorMode" class="browser-default">
+              <option value="ace/mode/javascript">JavaScript</option>
+              <option value="ace/mode/php" class="disabled">PHP</option>
+              <option value="ace/mode/ruby" class="disabled">Ruby</option>
+              <option value="ace/mode/python" class="disabled">Python</option>
+            </select>
+          </div>
         </div>
         <div id="editorWrapper" class="row">
   <!--         <div id="myEditorWrapper" class="players_ui"></div> -->
   <!--         <div id="otherEditorWrapper"></div> -->
         </div>
         <div id="gameController" class="players_ui">
-          <button type="button" id="gameFinish">Finish!!</button>
-          <button type="button" id="gameReset">Reset</button>
+          <button class="btn waves-effect waves-light" type="button" id="gameFinish">Submit
+            <i class="material-icons right">send</i>
+          </button>
+          <a class="waves-effect waves-light btn" id="gameReset"><i class="material-icons right">replay</i>Reset</a>
         </div>
       </div>
       <div id="chatWrapper" class="chatWrapper col s3">

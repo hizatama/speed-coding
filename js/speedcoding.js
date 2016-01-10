@@ -41,15 +41,13 @@ window.SpeedCoding = function(){
 
   self.initUserInterface = function(){
 
+    $('#gameReset').css({'visibility': 'hidden'});
+
     // オブザーバー
     if(self.observe){
       $('html').addClass('modeObserver');
-      $('.players_ui').hide();
-      $('.observers_ui').show();
     } else {
       $('html').addClass('modePlayer');
-      $('.players_ui').show();
-      $('.observers_ui').hide();
     }
   }
 
@@ -72,11 +70,15 @@ window.SpeedCoding = function(){
         self.peer.send({event:'player-fail'});
         self.playerFail(self.peer.peer.id);
       }
+      $('#gameFinish').css({'visibility': 'hidden'});
+      $('#gameReset').css({'visibility': 'visible'});
     });
 
     $('#gameReset').on('click', function(){
       self.peer.send({'envet': 'player-reset'});
       self.myPlayer.reset();
+      $('#gameReset').css({'visibility': 'hidden'});
+      $('#gameFinish').css({'visibility': 'visible'});
     });
 
     $('#chatTextbox').on('keypress', function(e){

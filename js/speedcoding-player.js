@@ -15,18 +15,20 @@ window.SpeedCodingPlayer = function(mine, playerData){
   self.editor = undefined;
   self.editorId = undefined;
   self.editorWrapperId = undefined;
+  self.mine = undefined;
   // self.stream = undefined;
   // self.elemStream = undefined;
 
   // status
   self.finished = false;
-  self.success = false;
+  self.successed = false;
 
   self.init = function(mine, playerData) {
 
     self.id = playerData.id;
     self.name = playerData.name;
     self.observe = playerData.observe;
+    self.mine = !!mine;
     if(!self.observe){
       // self.streamId = 'stream_'+playerData.id;
       self.editorId = 'editor_'+playerData.id;
@@ -131,14 +133,15 @@ window.SpeedCodingPlayer = function(mine, playerData){
 
   self.success = function(){
     self.finished = true;
-    self.success = true;
+    self.successed = true;
     $('.editorResult',"#"+self.editorWrapperId).addClass('success').fadeIn(500);
     self.editor.setDisable();
   }
 
   self.reset = function(){
     self.finished = false;
-    self.success = false;
+    self.successed = false;
+    self.mine && self.editor.setEnable();
     $('.editorResult',"#"+self.editorWrapperId)
     .removeClass('success fail').fadeOut(500);
   }
