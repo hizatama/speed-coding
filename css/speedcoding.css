@@ -9,7 +9,7 @@
   display: block;
 }
 
-.modeObserver .players_ui.
+.modeObserver .players_ui,
 .modePlayer .observers_ui{
   display: none;
 }
