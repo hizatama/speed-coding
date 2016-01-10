@@ -8,6 +8,7 @@ window.SpeedCodingEditor = function(editorId){
     mode: 'ace/mode/javascript'
   };
 
+  self.elemEditor = undefined;
   self.elemEditorTheme = undefined;
   self.elemEditorMode = undefined;
 
@@ -23,10 +24,13 @@ window.SpeedCodingEditor = function(editorId){
 
     self.elemEditorTheme = $('#editorTheme').val(self.editorSetting.theme);
     self.elemEditorMode = $('#editorMode').val(self.editorSetting.mode);
+    self.elemEditor = $('#'+editorId);
 
     self.editor = ace.edit(editorId);
     self.setEditorTheme(self.editorSetting.theme);
     self.setEditorMode(self.editorSetting.mode);
+    self.setDisable();
+    self.editor.$blockScrolling = Infinity;
 
     self.setEventHandlers();
   }
@@ -43,10 +47,6 @@ window.SpeedCodingEditor = function(editorId){
       self.setEditorMode($(this).val());
     });
 
-    self.editor.getSession().on('change', function(){
-      // send event cs.player-editor-change
-      $(document).trigger('sc.player-editor-change');
-    });
   }
 
   self.setEditorTheme = function(theme){
@@ -64,11 +64,11 @@ window.SpeedCodingEditor = function(editorId){
   }
 
   self.setEnable = function(){
-    self.editor.setReadonly(false);
+    self.editor.setReadOnly(false);
   }
 
   self.setDisable = function(){
-    self.editor.setReadonly(true);
+    self.editor.setReadOnly(true);
   }
 
   self.init(editorId);

@@ -20,7 +20,9 @@ window.SpeedCodingChat = function(){
   }
 
   self.add = function(userName, message){
-    self.elemChat.append($('div').text(userName + ':' + message));
+    self.elemChat.prepend($('<p>').addClass('chatRow')
+        .html('<span class="userName">'+userName+'</span><span class="chatText">' +message+'</span>'));
+    console.log(userName + ':' + message);
   }
 
   self.init();

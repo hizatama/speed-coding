@@ -3,6 +3,12 @@
   padding: 0;
 }
 
+.clearfix:after {
+  content: "";
+  clear: both;
+  display: block;
+}
+
 #main {
   position: relative;
   width: 100%;
@@ -40,16 +46,6 @@ header {
   text-align: right;
 }
 
-
-/* ================================
- エディタの設定
- ================================ */
-#programThemeWrapper {
-  background-color: #ddd;
-  margin: 5px 0;
-  padding: 8px;
-}
-
 /* ================================
  エディタの設定
  ================================ */
@@ -62,26 +58,82 @@ header {
   color: #aaa;
 }
 
+#programThemeWrapper {
+  background-color: #ddd;
+  margin: 5px 0;
+  padding: 8px;
+}
+
 /* ================================
- エディタ部分
+ エディタの設定
  ================================ */
-#editorWrapper,
-#chatWrapper,
-#otherEditorWrapper {
+.editorsWrapper {
+  position: relative;
+/*  float: left;
+  width: 100%;*/
+  z-index: 40;
+  padding-right: 220px;
+}
+
+.editor {
+  position: relative;
+  height: 300px;
+}
+.editorWrapper {
   position: relative;
   float: left;
   width: 50%;
 }
-.editor {
+.modeObserver .editorWrapper {
+  width: 33%;
+}
+
+.editor .editorLoading, 
+.editor .editorResult {
   position: relative;
-  height: 300px;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+}
+.editor .editorResult.fail {
+  background: rgba(255,0,0,0.3);
+}
+.editor .editorResult.success {
+  background: rgba(0,255,0,0.3);
+}
+.editorLoading {
+  background: rgba(0,0,0,0.3);
+}
+
+/* ================================
+  チャットエリア
+ ================================ */
+
+.chatWrapper {
+  position: relative;
+  float: right;
+  width: 200px;
+  height: 100%;
+  z-index: 50;
 }
 #chat {
   position: relative;
   height: 100%;
 }
-
-
-#otherEditorWrapper {
-  width: 25%;
+.chatLog {
+  font-size: 9px;
+  padding: 8px;
+  line-height: 1.3;
 }
+.chatLog .chatRow {
+  padding: 4px 0;
+  border-bottom: 1px solid #eee;
+}
+.chatLog .userName {
+  padding: 5px;
+  background: #ddd;
+}
+.chatLog .chatText {
+  padding: 5px;
+}
+
