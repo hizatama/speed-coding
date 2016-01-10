@@ -31,24 +31,32 @@ window.SpeedCodingPlayer = function(mine, playerData){
       // self.streamId = 'stream_'+playerData.id;
       self.editorId = 'editor_'+playerData.id;
       self.editorWrapperId = 'editorWrapper_'+playerData.id;
+      var editorclass = mine ? ' myEditor s12': ' s4';
 
-      $('<div>').attr({
+      var elemEditorWrapper = $('<div>').attr({
         'id': self.editorWrapperId,
-        'class': 'editorWrapper'
-      }).append($('<div>').attr({
+        'class': 'editorWrapper col' + editorclass
+      });
+
+      var elemEditor = $('<div>').attr({
         'id': self.editorId,
         'class': 'editor'
-      }))
-      .appendTo('#editorWrapper');
+      }).appendTo(elemEditorWrapper);
 
-      $('<div>').attr({
-        'class': 'editorResult'
-      }).hide().appendTo('#'+self.editorId);
+      $('#editorWrapper').append(elemEditorWrapper);
 
       self.editor = new SpeedCodingEditor(self.editorId);
 
+      // 結果表示用要素
+      elemEditor.append($('<div>').attr({'class': 'editorResult'}).hide());
+
+      // 名前表示用要素
+      elemEditor.append($('<span>').attr({'class': 'playerName'}).text(self.name));
+
+
       if(mine){
         self.editor.setEnable();
+        self.editor.editor.setValue('// input your code here');
         self.setPlayerData();
       }
 
@@ -90,18 +98,54 @@ window.SpeedCodingPlayer = function(mine, playerData){
     return self.editor.editor.getValue();
   }
 
+  self.checkAnswer = function(){
+    if(self.finished)return;
+
+    var result = false,
+      usersCode = self.editor.editor.getValue(),
+      testCode = `(function(){
+        ${usersCode};
+        if(func(0,100)!==5050)return false;
+        if(func(100,0)!==5050)return false;
+        if(func(0,1)!==1)return false;
+        if(func(1,0)!==1)return false;
+        if(func(-10,5)!==-40)return false;
+        if(func(5,-10)!==-40)return false;
+        if(func(-102, 18002)!==162039750)return false;
+        if(func(18002, -102)!==162039750)return false;
+        return true;
+        })()`;
+    try{
+      result = eval(testCode);
+    }catch(e){
+      //noop
+    }
+    return result;
+  }
+
   self.fail = function(){
+    self.finished = true;
     $('.editorResult',"#"+self.editorWrapperId).addClass('fail').fadeIn(500);
     self.editor.setDisable();
   }
 
   self.success = function(){
+    self.finished = true;
+    self.success = true;
     $('.editorResult',"#"+self.editorWrapperId).addClass('success').fadeIn(500);
     self.editor.setDisable();
   }
 
+  self.reset = function(){
+    self.finished = false;
+    self.success = false;
+    $('.editorResult',"#"+self.editorWrapperId)
+    .removeClass('success fail').fadeOut(500);
+  }
+
   self.destroy = function(){
-    self.editor && self.editor.elemEditor.remove();
+    // self.editor && self.editor.elemEditor.remove();
+    $("#"+self.editorWrapperId).remove();
   }
 
   self.init(mine, playerData);

@@ -1,4 +1,10 @@
-/// customize
+/// customize library
+jQuery.extend({
+  getQueryParameters : function(str) {
+    return (str || document.location.search).replace(/(^\?)/,'').split("&").map(function(n){return n = n.split("="),this[n[0]] = n[1],this}.bind({}))[0];
+  }
+});
+
 MultiParty.prototype.sendToPeer = function(peerId, data){
   if(this.peers[peerId] && this.peers[peerId].DCconn)
     this.peers[peerId].DCconn.send(data);
@@ -14,10 +20,12 @@ window.SpeedCoding = function(){
   self.peer = undefined;
   self.chat = undefined;
 
+  self.roomName = undefined;
   self.observe = false;
 
   self.init = function() {
 
+    self.roomName = $.getQueryParameters()['room'] || 'room1';
     self.observe = location.search.indexOf('observer') > 0 ;
 
     self.initUserInterface();
@@ -57,11 +65,20 @@ window.SpeedCoding = function(){
     });
 
     $('#gameFinish').on('click', function(){
-      self.peer.send({event:'player-success'});
-      self.playerSuccess(self.peer.peer.id);
+      if(self.myPlayer.checkAnswer()){
+        self.peer.send({event:'player-success'});
+        self.playerSuccess(self.peer.peer.id);
+      }else{
+        self.peer.send({event:'player-fail'});
+        self.playerFail(self.peer.peer.id);
+      }
     });
 
-    $('#chatSubmit').on('click', self.sendPlayerSpeak);
+    $('#gameReset').on('click', function(){
+      self.peer.send({'envet': 'player-reset'});
+      self.myPlayer.reset();
+    });
+
     $('#chatTextbox').on('keypress', function(e){
       if(e.keyCode == '13'){
         self.sendPlayerSpeak();
@@ -115,12 +132,6 @@ window.SpeedCoding = function(){
       var observeString = playerData.observe ? '(Observer)' : '';
       self.chat.add(playerData.name, '接続しました' + observeString);
     }
-
-    // 自分のデータを返す
-    // if(!reply){
-    //   console.debug('reply connection for:'+playerData.name);
-    //   self.sendPlayerJoinData(playerData.id, self.myPlayer, true);
-    // }
   }
 
   self.playerRequest = function(id){
@@ -163,6 +174,11 @@ window.SpeedCoding = function(){
     self.players[id].updateEditorText(editorText);
   }
 
+  self.playerReset = function(id){
+    if(id == self.peer.peer.id)return;
+    self.players[id].reset();
+  }
+
   self.playerSpeak = function(id, chatText){
     self.chat.add(self.players[id].name, chatText);
   }
@@ -190,7 +206,7 @@ window.SpeedCoding = function(){
     self.peer = new MultiParty({
       "key": "1868c327-4c09-4182-95aa-12913c96f374" ,
       "reliable": true,
-      "room": "speed-coding",
+      "room": self.roomName,
       "video": false,
       "audio": false,
       "polling_interval": 5000,
@@ -206,7 +222,8 @@ window.SpeedCoding = function(){
         id: peerId,
         observe: self.observe
       });
-      $('#playerName').text(self.myPlayer.name + '['+peerId+']');
+      var playType = self.observe ? 'Observer' : 'Player';
+      $('#playerName').text(self.myPlayer.name +'('+playType+')'+ '['+peerId+']');
     }).on('dc_open', function(peerId){
       console.debug('dc_open:'+peerId);
       self.playerRequest(peerId);
@@ -244,6 +261,9 @@ window.SpeedCoding = function(){
           break;
         case 'player-speak':
           self.playerSpeak(msg.id, data.chatText);
+          break;
+        case 'player-reset':
+          self.playerReset(msg.id);
           break;
       }
     }).on('error', function(error){
